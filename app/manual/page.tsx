@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import getSocket from "@/lib/socket";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import type { Socket } from "socket.io-client";
 
 const SemiJoystick = dynamic(() => import('@/components/shared/Joystick'), {
   ssr: false,
@@ -14,7 +15,7 @@ const SpeedSlider = dynamic(() => import('@/components/shared/Slider'), {
 });
 
 export default function Home() {
-  const socket = getSocket();
+  const socketRef = useRef<Socket | null>(null);
   const [status, setStatus] = useState('off');
 
   const handleMouseDown = () => {
@@ -24,9 +25,18 @@ export default function Home() {
   const handleMouseUp = () => {
     setStatus('off');
   };
+
+   useEffect(() => {
+    // الآن فقط يتم استدعاء getSocket() داخل المتصفح
+    socketRef.current = getSocket();
+  }, []);
+
   useEffect(() => {
-    socket.emit("joystick", { spinaround: status });
-  }, [status, socket]);
+    if (socketRef.current && socketRef.current.connected) {
+      socketRef.current.emit("joystick", { spinaround: status });
+    }
+  }, [status]);
+
   return (
     <main className="p-5 flex flex-col gap-5 max-w-7xl mx-auto">
       {/* بث الكاميرا */}
