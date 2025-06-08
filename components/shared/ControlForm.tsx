@@ -16,7 +16,6 @@ import {
 import { Input } from "@/components/ui/input"
 import Image from "next/image"
 import { Router, Save, Video } from 'lucide-react';
-import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import getSocket, { resetSocket } from "@/lib/socket"
 import { toast } from "sonner"
@@ -27,8 +26,6 @@ const formSchema = z.object({
 })
 
 const ControlForm = () => {
-
-    const router = useRouter();
     const [flaskServer, setFlaskServer] = useState("");
     const [cameraStream, setCameraStream] = useState("");
 

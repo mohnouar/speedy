@@ -21,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <body
         className={`${monaSans.variable} antialiased pattern dark h-screen w-screen overflow-hidden font-mona-sans`}
       >

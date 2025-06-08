@@ -1,7 +1,4 @@
-import ControlForm from "@/components/shared/ControlForm";
 import Hero from "@/components/shared/Hero";
-import { Button } from "@/components/ui/button";
-
 
 export default function Home() {
   return (
