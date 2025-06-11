@@ -20,7 +20,12 @@ export default function Home() {
   const [boxOpened, setBoxOpened] = useState(false);
   const [savedIP, setSavedIP] = useState("http://192.168.41.26:8080/video");
   const [streamError, setStreamError] = useState(false);
+  const [speed, setSpeed] = useState('');
 
+  socketRef.on('speed_update', (data: string) => {
+    console.log('Speed update received:', data);
+    setSpeed(data)
+  });
 
   const handleMouseDown = () => {
     setStatus('on');
@@ -102,7 +107,7 @@ export default function Home() {
               </Button>
             </div>
             <div className="bg-[#2A2C30] text-white text-center py-2 rounded-lg shadow">
-              Speed: <span className="font-bold">1.5 m/s</span>
+              Speed: <span className="font-bold">{speed} m/s</span>
             </div>
           </div>
         </div>
