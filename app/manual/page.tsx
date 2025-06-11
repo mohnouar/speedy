@@ -22,11 +22,6 @@ export default function Home() {
   const [streamError, setStreamError] = useState(false);
   const [speed, setSpeed] = useState('');
 
-  socketRef.on('speed_update', (data: string) => {
-    console.log('Speed update received:', data);
-    setSpeed(data)
-  });
-
   const handleMouseDown = () => {
     setStatus('on');
   };
@@ -40,6 +35,10 @@ export default function Home() {
     if (socketRef.current && socketRef.current.connected) {
       setSavedIP(localStorage.getItem("cameraStream") || "http://192.168.41.26:8080/video");
     }
+    socketRef.current?.on('speed_update', (data: string) => {
+      console.log('Speed update received:', data);
+      setSpeed(data)
+    });
   }, []);
 
   useEffect(() => {
