@@ -17,6 +17,10 @@ const SpeedSlider = dynamic(() => import('@/components/shared/Slider'), {
 export default function Home() {
   const socketRef = useRef<Socket | null>(null);
   const [status, setStatus] = useState('off');
+  const [boxOpened, setBoxOpened] = useState(false);
+  const [savedIP, setSavedIP] = useState("http://192.168.41.26:8080/video");
+  const [streamError, setStreamError] = useState(false);
+
 
   const handleMouseDown = () => {
     setStatus('on');
@@ -26,9 +30,11 @@ export default function Home() {
     setStatus('off');
   };
 
-   useEffect(() => {
-    // الآن فقط يتم استدعاء getSocket() داخل المتصفح
+  useEffect(() => {
     socketRef.current = getSocket();
+    if (socketRef.current && socketRef.current.connected) {
+      setSavedIP(localStorage.getItem("cameraStream") || "http://192.168.41.26:8080/video");
+    }
   }, []);
 
   useEffect(() => {
@@ -37,32 +43,47 @@ export default function Home() {
     }
   }, [status]);
 
+  useEffect(() => {
+    if (socketRef.current && socketRef.current.connected) {
+      if (boxOpened) {
+        socketRef.current.emit("open_box", { open_box: "open" });
+      } else {
+        socketRef.current.emit("open_box", { open_box: "close" });
+      }
+    }
+  }, [boxOpened]);
+
+  const handleBoxOpen = () => {
+    setBoxOpened(!boxOpened);
+  }
+
   return (
     <main className="p-5 flex flex-col gap-5 max-w-7xl mx-auto">
-      {/* بث الكاميرا */}
-      <div className="flex justify-center">
-        <Image
-          src="/user-avatar.png"
-          alt="Live Feed"
-          className="rounded-2xl bg-cover max-sm:max-h-60"
-          width={300}
-          height={200}
-        />
+      <div className="flex justify-center md:justify-start">
+        {!streamError ? (
+          <img
+            src={savedIP}
+            alt="Live Feed"
+            className="rounded-2xl w-fit md:w-2/3"
+            onError={() => setStreamError(true)}
+          />
+        ) : (
+          <Image
+            src="/fallback.png" // اجعل هذا هو اسم الصورة التي تولدها لاحقًا
+            alt="Stream Not Available"
+            width={800}
+            height={400}
+            className="rounded-2xl w-fit md:w-2/3 object-contain"
+          />
+        )}
       </div>
 
-      {/* عناصر التحكم */}
       <div className="flex flex-col md:flex-row gap-5 justify-between items-center md:items-start">
-        <div className="w-full md:w-1/2 flex flex-col items-center gap-4">
+        <div className="w-full md:w-1/2 flex items-center gap-4">
           <SemiJoystick />
 
-          {/* العناصر الإضافية الخاصة بالهاتف */}
           <div className="flex flex-col gap-3 w-full">
-            <div className="flex justify-center gap-2">
-              <Button 
-                className="px-4 py-2 bg-white text-black rounded-lg shadow hover:bg-gray-200 transition"
-              >
-                Open Box
-              </Button>
+            <div className="flex max-md:flex-col justify-center gap-2">
               <Button
                 onMouseDown={handleMouseDown}
                 onMouseUp={handleMouseUp}
@@ -72,6 +93,12 @@ export default function Home() {
                 className="px-4 py-2 bg-white text-black rounded-lg shadow hover:bg-gray-200 transition"
               >
                 Spin Around
+              </Button>
+              <Button 
+                className="px-4 py-2 bg-white text-black rounded-lg shadow hover:bg-gray-200 transition"
+                onClick={handleBoxOpen}
+              >
+                Open Box
               </Button>
             </div>
             <div className="bg-[#2A2C30] text-white text-center py-2 rounded-lg shadow">

@@ -63,7 +63,7 @@ const ControlForm = () => {
         })
     }
     return (
-        <div className="flex-center max-w-sm sm:w-md bg-gradient-to-r from-[#FFFFFF] to-[#FFC19E] p-[1px] rounded-2xl mx-5">
+        <div className="flex-center max-w-sm sm:w-md primary-gradient p-[1px] rounded-2xl mx-5">
             <div className="dark-gradient bg-[#1A1C20] p-6 rounded-2xl card-border w-full py-10 px-10">
                 <div className="flex flex-col justify-center items-center gap-3">
                     <div className="flex-center gap-2">

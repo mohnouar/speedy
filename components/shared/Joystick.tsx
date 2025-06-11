@@ -24,7 +24,7 @@ export default function SemiJoystick() {
       catchDistance: 150,
       color: "white",
       size: 170,
-    }) as JoystickManager; // ✅ الحل هنا
+    }) as JoystickManager;
 
     joystickRef.current = joystick;
 

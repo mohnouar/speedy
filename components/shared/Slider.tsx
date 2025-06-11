@@ -22,12 +22,12 @@ export default function SpeedSlider() {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto px-6 py-3 rounded-2xl shadow-xl text-white dark-gradient border border-[#1F232A] ring-1 ring-[#2A2E38]">
-      <h2 className="text-xl font-semibold mb-2 text-center">Robot Max Speed</h2>
+    <div className="w-full max-w-md mx-auto px-6 py-2 rounded-2xl shadow-xl text-white dark-gradient border border-[#1F232A] ring-1 ring-[#2A2E38]">
+      <h2 className="text-xl font-semibold text-center">Robot Max Speed</h2>
 
-      <div className="flex items-center justify-between mb-2">
-        <span className="text-sm text-gray-400">10</span>
-        <span className="text-sm text-gray-400">255</span>
+      <div className="flex items-center justify-between">
+        <span className="text-sm text-primary">10</span>
+        <span className="text-sm text-primary">255</span>
       </div>
 
       <input
@@ -50,7 +50,7 @@ export default function SpeedSlider() {
                    [&::-moz-range-thumb]:bg-blue-500"
       />
 
-      <p className="mt-4 text-center text-sm text-primary-100">
+      <p className="mt-2 text-center text-sm text-primary-100">
         Current Speed: <span className="font-bold text-[#FFC19E]">{speed}</span>
       </p>
     </div>
