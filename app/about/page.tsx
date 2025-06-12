@@ -11,7 +11,7 @@ export default function AboutPage() {
   const footerRef = useRef(null);
 
   useEffect(() => {
-    const tl = gsap.timeline({ delay: 0.3 });
+    const tl = gsap.timeline({ delay: 0.6 });
 
     tl.from(logoRef.current, {
       opacity: 0,

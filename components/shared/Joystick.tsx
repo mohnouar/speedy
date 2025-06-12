@@ -76,7 +76,7 @@ export default function SemiJoystick() {
     <div className="">
       <div
         ref={zoneRef}
-        className="relative w-50 h-52 rounded-2xl dark-gradient border border-[#1F232A] ring-1 ring-[#2A2E38]"
+        className="relative w-50 md:w-96 h-52 md:h-96 rounded-2xl dark-gradient border border-[#1F232A] ring-1 ring-[#2A2E38]"
       ></div>
     </div>
   );

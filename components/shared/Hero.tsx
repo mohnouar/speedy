@@ -47,7 +47,7 @@ const Hero = () => {
 
                 <div
                 ref={textRef}
-                className="text-2xl sm:text-4xl lg:text-6xl primary-gradient bg-clip-text text-transparent font-bold max-w-full sm:max-w-2xl leading-snug min-h-[4rem]"
+                className="text-2xl sm:text-4xl lg:text-6xl primary-gradient bg-clip-text text-transparent font-bold max-w-full sm:max-w-2xl leading-snug min-h-[4rem] h-20 sm:h-64"
                 ></div>
             </div>
 

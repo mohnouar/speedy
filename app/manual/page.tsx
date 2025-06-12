@@ -18,9 +18,9 @@ export default function Home() {
   const socketRef = useRef<Socket | null>(null);
   const [status, setStatus] = useState('off');
   const [boxOpened, setBoxOpened] = useState(false);
-  const [savedIP, setSavedIP] = useState("http://192.168.41.26:8080/video");
+  const [savedIP, setSavedIP] = useState("https://192.168.41.26:8080/video");
   const [streamError, setStreamError] = useState(false);
-  const [speed, setSpeed] = useState('');
+  const [speed, setSpeed] = useState(0);
 
   const handleMouseDown = () => {
     setStatus('on');
@@ -33,11 +33,19 @@ export default function Home() {
   useEffect(() => {
     socketRef.current = getSocket();
     if (socketRef.current && socketRef.current.connected) {
-      setSavedIP(localStorage.getItem("cameraStream") || "http://192.168.41.26:8080/video");
+      setSavedIP(localStorage.getItem("cameraStream") || "https://192.168.41.26:8080/video");
     }
-    socketRef.current?.on('speed_update', (data: string) => {
+    socketRef.current?.on('speed_update', (data: { robot_speed: number }) => {
       console.log('Speed update received:', data);
-      setSpeed(data)
+      
+      const maxRPM = 400;
+      const wheelDiameter = 0.14;
+      const rpm = (data.robot_speed / 255) * maxRPM;
+      const rps = rpm / 60;
+      const circumference = Math.PI * wheelDiameter;
+      const speed_mps = rps * circumference;
+
+      setSpeed(speed_mps);
     });
   }, []);
 
@@ -62,31 +70,31 @@ export default function Home() {
   }
 
   return (
-    <main className="p-5 flex flex-col gap-5 max-w-7xl mx-auto">
+    <main className="p-5 flex flex-col gap-5 max-w-7xl mx-auto md:relative">
       <div className="flex justify-center md:justify-start">
         {!streamError ? (
           <img
             src={savedIP}
             alt="Live Feed"
-            className="rounded-2xl w-fit md:w-2/3"
+            className="rounded-2xl w-fit md:w-3/5"
             onError={() => setStreamError(true)}
           />
         ) : (
           <Image
-            src="/fallback.png" // اجعل هذا هو اسم الصورة التي تولدها لاحقًا
+            src="/fallback.png"
             alt="Stream Not Available"
             width={800}
             height={400}
-            className="rounded-2xl w-fit md:w-2/3 object-contain"
+            className="rounded-2xl w-fit md:w-3/5 object-contain"
           />
         )}
       </div>
 
       <div className="flex flex-col md:flex-row gap-5 justify-between items-center md:items-start">
-        <div className="w-full md:w-1/2 flex items-center gap-4">
+        <div className="w-full md:w-1/2 flex md:flex-col md:absolute top-5 right-[-50] items-center gap-4">
           <SemiJoystick />
 
-          <div className="flex flex-col gap-3 w-full">
+          <div className="flex flex-col gap-3 w-full md:items-center">
             <div className="flex max-md:flex-col justify-center gap-2">
               <Button
                 onMouseDown={handleMouseDown}
@@ -105,13 +113,13 @@ export default function Home() {
                 Open Box
               </Button>
             </div>
-            <div className="bg-[#2A2C30] text-white text-center py-2 rounded-lg shadow">
-              Speed: <span className="font-bold">{speed} m/s</span>
+            <div className="bg-[#2A2C30] text-white md:w-96 text-center py-2 rounded-lg shadow">
+              Speed: <span className="font-bold">{speed.toFixed(2)} m/s</span>
             </div>
           </div>
         </div>
 
-        <div className="w-full md:w-1/2 flex justify-center">
+        <div className="w-full md:mt-10 md:w-1/2 flex justify-center">
           <SpeedSlider />
         </div>
       </div>
