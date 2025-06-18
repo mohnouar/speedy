@@ -17,7 +17,7 @@ export default function SpeedSlider() {
 
       throttleTimeoutRef.current = setTimeout(() => {
         throttleTimeoutRef.current = null;
-      }, 100);
+      }, 50);
     }
   };
 

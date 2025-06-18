@@ -18,7 +18,7 @@ export default function Home() {
   const socketRef = useRef<Socket | null>(null);
   const [status, setStatus] = useState('off');
   const [boxOpened, setBoxOpened] = useState(false);
-  const [savedIP, setSavedIP] = useState("https://192.168.41.26:8080/video");
+  const [savedIP, setSavedIP] = useState("https://192.168.41.26:8080");
   const [streamError, setStreamError] = useState(false);
   const [speed, setSpeed] = useState(0);
 
@@ -30,11 +30,13 @@ export default function Home() {
     setStatus('off');
   };
 
+  useEffect(()=> {
+    setSavedIP(localStorage.getItem("cameraStream") || "https://192.168.41.26:8080");
+    console.log(savedIP)
+  },[])
+
   useEffect(() => {
     socketRef.current = getSocket();
-    if (socketRef.current && socketRef.current.connected) {
-      setSavedIP(localStorage.getItem("cameraStream") || "https://192.168.41.26:8080/video");
-    }
     socketRef.current?.on('speed_update', (data: { robot_speed: number }) => {
       console.log('Speed update received:', data);
       
@@ -74,7 +76,7 @@ export default function Home() {
       <div className="flex justify-center md:justify-start">
         {!streamError ? (
           <img
-            src={savedIP}
+            src={`${savedIP}/video`}
             alt="Live Feed"
             className="rounded-2xl w-fit md:w-3/5"
             onError={() => setStreamError(true)}
@@ -86,6 +88,7 @@ export default function Home() {
             width={800}
             height={400}
             className="rounded-2xl w-fit md:w-3/5 object-contain"
+            priority={true}
           />
         )}
       </div>

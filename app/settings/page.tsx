@@ -29,7 +29,7 @@ const Page = () => {
             <div className='flex flex-wrap justify-center gap-5'>
                 <Button onClick={() => handleControlMode("AUTO", "auto")}>Auto Control</Button>
                 <Button onClick={() => handleControlMode("MANUAL", "manual")}>Manual Control</Button>
-                <Button onClick={() => handleControlMode("VOICE", "voice")}>Voice Control</Button>
+                <Button onClick={() => handleControlMode("VOICE", "voice-control")}>Voice Control</Button>
             </div>
         </main>
     )
